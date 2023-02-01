@@ -30,12 +30,35 @@ export const Signup = () => {
   const uploadImage = async () => {
     const data = new FormData();
     data.append("file", image);
+    // upload preset gotten from cloudinary
+    data.append("upload_preset", "anrthdyo");
+
+    try {
+      setUploadingImage(true);
+      let response = await fetch(
+        "https://api.cloudinary.com/v1_1/drh0fryyw/image/upload",
+        {
+          method: "post",
+          body: data,
+        }
+      );
+
+      const urlData = await response.json();
+      setUploadingImage(false);
+      return urlData.url;
+    } catch (err) {
+      alert(err);
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!image) return alert("please upload your profile image");
-    const url = await uploadImage();
+    const url = await uploadImage(image);
+    console.log(url);
+
+    // signup user
   };
 
   return (
@@ -99,7 +122,7 @@ export const Signup = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Create account
+              {uploadingImage ? "Signup now..." : "Signup"}
             </Button>
 
             <div className="py-4">
