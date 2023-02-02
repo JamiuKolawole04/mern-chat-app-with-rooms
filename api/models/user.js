@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const { isEmail } = require("validator");
 
 const userShema = Schema(
@@ -31,3 +31,7 @@ const userShema = Schema(
   },
   { minimize: false, timestamps: true }
 );
+
+const User = model("Users", userShema);
+
+module.exports = User;
