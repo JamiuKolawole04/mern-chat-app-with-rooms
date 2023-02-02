@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 const rooms = ["general", "tech", "finance", "crypto"];
 
+const userRoute = require("./routes/user");
+
 require("./connection");
 
 app.use(cors());
@@ -18,6 +20,8 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"],
   },
 });
+
+app.use("/api/v1/auth", userRoute);
 
 app.get("/", (req, res) => {
   res.status(200).json({
