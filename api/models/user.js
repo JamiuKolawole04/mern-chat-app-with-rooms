@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { isEmail } = require("validator");
+const bcrypt = require("bcrypt");
 
 const UserSchema = Schema(
   {
