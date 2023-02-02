@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 const rooms = ["general", "tech", "finance", "crypto"];
 
+require("./connection");
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
