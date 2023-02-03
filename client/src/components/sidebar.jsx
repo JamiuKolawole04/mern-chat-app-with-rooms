@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 import { AppContext } from "../context/appContext";
 
 export const Sidebar = () => {
-  const roomsClientSide = ["first room", "second room", "third room"];
-
   const user = useSelector((state) => state.user);
   const {
     socket,

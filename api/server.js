@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
   socket.on("new-user", async () => {
     const members = await User.find();
     // io.emit emits to allusers connected to the socket
-    //egg, communicating to all users that a new user is about to join the app
+    //eg, communicating to all users that a new user is about to join the app
     io.emit("new-user", members);
   });
 
@@ -76,6 +76,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message-room", async (room, content, sender, time, date) => {
+    console.log("message-room", { room, content, sender, time, date });
     const newMessage = await Message.create({
       content,
       from: sender,
