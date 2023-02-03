@@ -12,7 +12,6 @@ import { useLogoutUserMutation } from "../services/appApi";
 
 export const Navigation = () => {
   const user = useSelector((state) => state.user);
-  console.log(user);
   const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
 
   const handleLogout = async (e) => {

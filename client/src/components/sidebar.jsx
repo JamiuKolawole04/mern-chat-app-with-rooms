@@ -1,8 +1,13 @@
 import { Fragment } from "react";
 import { ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 export const Sidebar = () => {
+  const user = useSelector((state) => state.user);
   const rooms = ["first room", "second room", "third room"];
+
+  if (!user) return <></>;
+
   return (
     <Fragment>
       <h2>Available rooms</h2>
