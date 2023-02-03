@@ -23,7 +23,10 @@ export const userSlice = createSlice({
     );
 
     //logout: destroy user session
-    builder.addMatcher(appApi.endpoints.logoutUser.matchFulfilled, () => null);
+    builder.addMatcher(
+      appApi.endpoints.logoutUser.matchFulfilled,
+      (state, { payload }) => null
+    );
   },
 });
 

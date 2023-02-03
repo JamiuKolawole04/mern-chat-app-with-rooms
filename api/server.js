@@ -103,7 +103,9 @@ io.on("connection", (socket) => {
       await user.save();
       const members = await User.find();
       socket.broadcast.emit("new-user", members);
+      res.status(200).json({ message: "user logged out" });
     } catch (err) {
+      console.log(err);
       res.status(500).json(err);
     }
   });

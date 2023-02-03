@@ -18,11 +18,15 @@ export const Navigation = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    await logoutUser(user);
+    try {
+      await logoutUser(user);
+    } catch (err) {
+      console.log(err);
+    }
 
     // redirect to hom page
     // window.location.replace("/");
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (

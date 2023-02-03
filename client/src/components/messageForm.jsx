@@ -46,6 +46,20 @@ export const MessageForm = () => {
     <Fragment>
       <div className="messages-output">
         {!user && <div className="alert alert-danger">Please login</div>}
+
+        {user &&
+          messages.map(({ _id: date, messagesByDate }, _i) => (
+            <div key={_i}>
+              <p className="alert alert-info text-center message-date-indicator">
+                {date}
+              </p>
+              {messagesByDate?.map(({ content, time, from }, _i) => (
+                <div key={_i} className="message">
+                  <p>{content}</p>
+                </div>
+              ))}
+            </div>
+          ))}
       </div>
 
       <Form onSubmit={handleSubmit}>
