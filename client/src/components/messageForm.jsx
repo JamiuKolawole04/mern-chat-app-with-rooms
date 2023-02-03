@@ -25,7 +25,10 @@ export const MessageForm = () => {
 
   const todayDate = getFormattedDate();
 
-  socket.off("room-messages").on("room-messages");
+  socket.off("room-messages").on("room-messages", (roomMessages) => {
+    console.log(roomMessages);
+    setMessages(roomMessages);
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
