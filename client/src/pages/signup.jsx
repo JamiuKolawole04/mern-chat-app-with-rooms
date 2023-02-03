@@ -5,17 +5,18 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import botImg from "../assets/images/bot.jpeg";
+import { useSignUpUserMutation } from "../services/appApi";
 import "./signup.css";
 
 export const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
   //image upload status
   const [image, setImage] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [signUpUser, { isLoading, error }] = useSignUpUserMutation();
 
   const validateImg = (e) => {
     const file = e.target.files[0];
@@ -59,6 +60,11 @@ export const Signup = () => {
     console.log(url);
 
     // signup user
+    signUpUser({ name, email, password, picture: url }).then((data) => {
+      if (data) {
+        console.log(data);
+      }
+    });
   };
 
   return (
