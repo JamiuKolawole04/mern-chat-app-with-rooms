@@ -93,6 +93,20 @@ io.on("connection", (socket) => {
     // broadcasing notification to that specific room   |
     socket.broadcast.emit("notifications", room);
   });
+
+  app.delete("/api/v1/auth/logout", async (req, res) => {
+    try {
+      const { _id, newMessages } = req.body;
+      const user = await User.findById(_id);
+      user.status = "offline";
+      user.newMessages = newMessages;
+      await user.save();
+      const members = await User.find();
+      socket.broadcast.emit("new-user", members);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 });
 
 server.listen(process.env.PORT, () => {

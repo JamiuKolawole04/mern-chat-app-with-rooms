@@ -6,12 +6,14 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
 import { useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/images/logo.png";
 import { useLogoutUserMutation } from "../services/appApi";
 
 export const Navigation = () => {
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
 
   const handleLogout = async (e) => {
@@ -19,7 +21,8 @@ export const Navigation = () => {
     await logoutUser(user);
 
     // redirect to hom page
-    window.location.replace("/");
+    // window.location.replace("/");
+    navigate("/");
   };
 
   return (
