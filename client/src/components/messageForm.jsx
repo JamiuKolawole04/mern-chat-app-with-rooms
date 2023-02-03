@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -25,11 +25,6 @@ export const MessageForm = () => {
 
   const todayDate = getFormattedDate();
 
-  socket.off("room-messages").on("room-messages", (roomMessages) => {
-    console.log(roomMessages);
-    setMessages(roomMessages);
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message) return;
@@ -41,6 +36,23 @@ export const MessageForm = () => {
     socket.emit("message-room", roomId, message, user, time, todayDate);
     setMessage("");
   };
+
+  // socket.off("room-messages").on("room-messages", (roomMessages) => {
+  //   console.log(roomMessages);
+  //   setMessages(roomMessages);
+  // });
+
+  useEffect(() => {
+    socket.off("room-messages").on("room-messages", (roomMessages) => {
+      console.log(roomMessages);
+      setMessages(roomMessages);
+    });
+  }, [socket, setMessages, handleSubmit]);
+
+  // socket.on("room-messages", (roomMessages) => {
+  //   console.log(roomMessages);
+  //   setMessages(roomMessages);
+  // });
 
   return (
     <Fragment>

@@ -92,6 +92,9 @@ io.on("connection", (socket) => {
 
     // broadcasing notification to that specific room   |
     socket.broadcast.emit("notifications", room);
+
+    // emiting roomMessage to client on submittig meesage room from client form
+    socket.emit("room-messages", roomMessages);
   });
 
   app.delete("/api/v1/auth/logout", async (req, res) => {

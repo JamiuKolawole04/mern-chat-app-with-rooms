@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect, useCallback } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -18,14 +18,20 @@ export const Sidebar = () => {
     setPrivateMemberMsg,
   } = useContext(AppContext);
 
-  useEffect(() => {
-    if (user) {
-      setCurrentRoom("general");
-      getRooms();
-      socket.emit("join-room", "general");
-      socket.emit("new-user");
-    }
-  }, [setCurrentRoom, socket, user]);
+  // const getRooms = async () => {
+  //   fetch("http://localhost:8084/api/v1/rooms")
+  //     .then((res) => res.json())
+  //     .then((data) => setRooms(data))
+  //     .catch((err) => console.log(err));
+  // };
+  const getRooms = useCallback(async () => {
+    fetch("http://localhost:8084/api/v1/rooms")
+      .then((res) => res.json())
+      .then((data) => setRooms(data))
+      .catch((err) => console.log(err));
+  }, [setRooms]);
+
+  console.log({ rooms, members });
 
   // switch off before switching on
   // once on, it keeps sending a message or messages
@@ -33,12 +39,28 @@ export const Sidebar = () => {
     setMembers(payload);
   });
 
-  const getRooms = async () => {
-    fetch("http://localhost:8084/api/v1/rooms")
-      .then((res) => res.json())
-      .then((data) => setRooms(data));
-  };
-  console.log({ rooms, members });
+  const joinRoom = useCallback(
+    (room, isPublic = true) => {
+      if (!user) return alert("please login first");
+      socket.emit("join-room", room);
+      setCurrentRoom(room);
+
+      if (isPublic) {
+        setPrivateMemberMsg(null);
+      }
+      // dispatch for notifications
+    },
+    [setCurrentRoom, setPrivateMemberMsg, socket, user]
+  );
+
+  useEffect(() => {
+    if (user) {
+      setCurrentRoom("general");
+      getRooms();
+      socket.emit("join-room", "general");
+      socket.emit("new-user");
+    }
+  }, [user, socket, setCurrentRoom, getRooms, joinRoom]);
 
   if (!user) return <></>;
 
@@ -48,7 +70,18 @@ export const Sidebar = () => {
 
       <ListGroup>
         {rooms.map((room, _i) => (
-          <ListGroup.Item key={_i}>{room}</ListGroup.Item>
+          <ListGroup.Item
+            key={_i}
+            onClick={() => joinRoom(room)}
+            active={room === currentRoom}
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            {room} {currentRoom !== room && <span></span>}
+          </ListGroup.Item>
         ))}
       </ListGroup>
       <h2>Members</h2>
