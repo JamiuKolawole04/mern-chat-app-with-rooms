@@ -53,7 +53,9 @@ function sortRoomMessagesByDate(messages) {
   });
 }
 
-app.get("/api/v1/rooms", (req, res) => {});
+app.get("/api/v1/rooms", (req, res) => {
+  res.json(rooms);
+});
 
 //socket connections
 io.on("connection", (socket) => {
@@ -71,6 +73,24 @@ io.on("connection", (socket) => {
     // socket.emit emits to the particular user connected to the socket
     // eg, communicating to a user joining the room from socket.on("join-room")
     socket.emit("room-messages", roomMessages);
+  });
+
+  socket.on("message-room", async (room, content, sender, time, date) => {
+    const newMessage = await Message.create({
+      content,
+      from: sender,
+      to: room,
+      time,
+      date,
+    });
+    let roomMessages = await getLastMessagesFromRoom(room);
+    roomMessages = sortRoomMessagesByDate(roomMessages);
+
+    // sending message to room
+    io.to(room).emit(roomMessages);
+
+    // broadcasing notification to that specific room   |
+    socket.broadcast.emit("notifications", room);
   });
 });
 

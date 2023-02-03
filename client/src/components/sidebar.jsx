@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -19,6 +19,16 @@ export const Sidebar = () => {
     privateMemberMsg,
     setPrivateMemberMsg,
   } = useContext(AppContext);
+
+  useEffect(() => {
+    if (user) {
+      setCurrentRoom("general");
+      getRooms();
+      socket.emit("join-room", "general");
+      socket.emit("new-user");
+    }
+  }, [setCurrentRoom, socket, user]);
+
   // switch off before switching on
   // once on, it keeps sending a message or messages
   socket.off("new-user").on("new-user", (payload) => {
@@ -30,6 +40,7 @@ export const Sidebar = () => {
       .then((res) => res.json())
       .then((data) => setRooms(data));
   };
+  console.log({ rooms, members });
 
   if (!user) return <></>;
 
@@ -38,7 +49,7 @@ export const Sidebar = () => {
       <h2>Available rooms</h2>
 
       <ListGroup>
-        {roomsClientSide.map((room, _i) => (
+        {rooms.map((room, _i) => (
           <ListGroup.Item key={_i}>{room}</ListGroup.Item>
         ))}
       </ListGroup>
