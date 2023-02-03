@@ -9,7 +9,6 @@ const rooms = ["general", "tech", "finance", "crypto"];
 const userRoute = require("./routes/user");
 
 require("./connection");
-
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());

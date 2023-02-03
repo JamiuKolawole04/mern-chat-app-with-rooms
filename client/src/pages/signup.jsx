@@ -9,6 +9,8 @@ import { useSignUpUserMutation } from "../services/appApi";
 import "./signup.css";
 
 export const Signup = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -62,7 +64,7 @@ export const Signup = () => {
     // signup user
     signUpUser({ name, email, password, picture: url }).then((data) => {
       if (data) {
-        console.log(data);
+        navigate("/chat");
       }
     });
   };

@@ -4,14 +4,28 @@ import Form from "react-bootstrap/Form";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useLoginUserMutation } from "../services/appApi";
 import "./login.css";
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    // login logic
+    loginUser({ email, password })
+      .then((data) => {
+        if (data) {
+          navigate("/chat");
+          // soccket work
+          // navigate to chat
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
