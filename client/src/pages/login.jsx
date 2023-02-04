@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useLoginUserMutation } from "../services/appApi";
@@ -41,6 +41,7 @@ export const Login = () => {
         >
           <Form style={{ width: "80%", maxWidth: 500 }} onSubmit={handleLogin}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
+              {error && <p className="alert alert-danger">{error.data}</p>}
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -66,7 +67,7 @@ export const Login = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Login
+              {isLoading ? <Spinner animation="grow" /> : "Login"}
             </Button>
 
             <div className="py-4">

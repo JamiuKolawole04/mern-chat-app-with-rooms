@@ -66,9 +66,10 @@ io.on("connection", (socket) => {
     io.emit("new-user", members);
   });
 
-  socket.on("join-room", async (room) => {
-    socket.join(room);
-    let roomMessages = await getLastMessagesFromRoom(room);
+  socket.on("join-room", async (newRoom, previousRoom) => {
+    socket.join(newRoom);
+    socket.leave(previousRoom);
+    let roomMessages = await getLastMessagesFromRoom(newRoom);
     roomMessages = sortRoomMessagesByDate(roomMessages);
     // socket.emit emits to the particular user connected to the socket
     // eg, communicating to a user joining the room from socket.on("join-room")

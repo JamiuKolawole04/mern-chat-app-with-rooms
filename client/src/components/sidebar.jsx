@@ -50,7 +50,7 @@ export const Sidebar = () => {
   const joinRoom = useCallback(
     (room, isPublic = true) => {
       if (!user) return alert("please login first");
-      socket.emit("join-room", room);
+      socket.emit("join-room", room, currentRoom);
       setCurrentRoom(room);
 
       if (isPublic) {
@@ -59,7 +59,7 @@ export const Sidebar = () => {
       // dispatch for notifications
       dispatch(resetNotifications(room));
     },
-    [setCurrentRoom, setPrivateMemberMsg, socket, user]
+    [setCurrentRoom, setPrivateMemberMsg, socket, user, dispatch, currentRoom]
   );
 
   socket.off("notifications").on("notifications", (room) => {

@@ -15,7 +15,7 @@ export const Navigation = () => {
   const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
+  const [logoutUser, { isLoading }] = useLogoutUserMutation();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ export const Navigation = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item>
                   <Button variant="danger" onClick={handleLogout}>
-                    Logout
+                    {isLoading ? "logging out.." : "Logout"}
                   </Button>
                 </NavDropdown.Item>
               </NavDropdown>
