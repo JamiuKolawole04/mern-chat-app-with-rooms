@@ -56,7 +56,7 @@ export const Navigation = () => {
                 title={
                   <Fragment>
                     <img
-                      src={user?.picture}
+                      src={user.picture}
                       alt="profile-pic"
                       style={{
                         width: 30,

@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
 
   app.delete("/api/v1/auth/logout", async (req, res) => {
     try {
-      const { _id, newMessages } = req.body.user;
+      const { _id, newMessages } = req.body;
       const user = await User.findById(_id);
       user.status = "offline";
       user.newMessages = newMessages;

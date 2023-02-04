@@ -58,14 +58,16 @@ export const Sidebar = () => {
       }
       // dispatch for notifications
       dispatch(resetNotifications(room));
-
-      socket.off("notifications").on("notifications", (room) => {
-        console.log(room);
-        dispatch(addNotifications(room));
-      });
     },
     [setCurrentRoom, setPrivateMemberMsg, socket, user]
   );
+
+  socket.off("notifications").on("notifications", (room) => {
+    // only have notifications if you are not in the room
+    if (currentRoom !== room) {
+      dispatch(addNotifications(room));
+    }
+  });
 
   useEffect(() => {
     if (user) {
@@ -111,7 +113,7 @@ export const Sidebar = () => {
             {room}
             {currentRoom !== room && (
               <span className="badge round-pill bg-primary">
-                {user?.user?.newMessages[room]}
+                {user.newMessages[room]}
               </span>
             )}
           </ListGroup.Item>
@@ -135,9 +137,17 @@ export const Sidebar = () => {
                 <i className="fas fa-circle sidebar-offline-status"></i>
               )}
             </Col>
+            <Col xs={9}>
+              {member.name}
+              {member._id === user?._id && "(You)"}
+              {member.status === "offline" && "(offline)"}
+            </Col>
+            <Col xs={1}>
+              <span className="badge rounded-pill bg-primary">
+                {user?.newMessages[orderIds(member._id, user?._id)]}
+              </span>
+            </Col>
           </Row>
-
-          {member.name}
         </ListGroup.Item>
       ))}
     </Fragment>
