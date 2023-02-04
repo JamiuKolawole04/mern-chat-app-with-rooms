@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useCallback } from "react";
-import { ListGroup } from "react-bootstrap";
+import { Col, ListGroup, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -8,8 +8,11 @@ import {
   addNotifications,
   resetNotifications,
 } from "../redux/features/userSlice";
+import "./sidenav.css";
+
 export const Sidebar = () => {
   const user = useSelector((state) => state.user);
+
   const {
     socket,
     rooms,
@@ -105,10 +108,10 @@ export const Sidebar = () => {
               justifyContent: "space-between",
             }}
           >
-            {room}{" "}
+            {room}
             {currentRoom !== room && (
               <span className="badge round-pill bg-primary">
-                {user.newMessages[room]}
+                {user?.user?.newMessages[room]}
               </span>
             )}
           </ListGroup.Item>
@@ -123,6 +126,17 @@ export const Sidebar = () => {
           onClick={() => handlePrivateMemberMessage(member)}
           disabled={member._id === user._id}
         >
+          <Row>
+            <Col xs={2} className="member-status">
+              <img src={member.picture} alt="" className="member-status-img" />
+              {member.status === "online" ? (
+                <i className="fas fa-circle sidebar-online-status"></i>
+              ) : (
+                <i className="fas fa-circle sidebar-offline-status"></i>
+              )}
+            </Col>
+          </Row>
+
           {member.name}
         </ListGroup.Item>
       ))}

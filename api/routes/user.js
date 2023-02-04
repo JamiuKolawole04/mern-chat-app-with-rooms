@@ -34,7 +34,10 @@ router.post("/login", async (req, res) => {
     const user = await User.findByCredentials(email, password);
     user.status = "online";
     await user.save();
-    res.status(200).json(user);
+    res.status(200).json({
+      message: "user logged in successfully",
+      user
+    });
   } catch (e) {
     res.status(400).json(e.message);
   }

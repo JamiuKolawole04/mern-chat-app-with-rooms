@@ -13,6 +13,7 @@ import { useLogoutUserMutation } from "../services/appApi";
 
 export const Navigation = () => {
   const user = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
 
@@ -26,7 +27,7 @@ export const Navigation = () => {
 
     // redirect to hom page
     // window.location.replace("/");
-    navigate("/", { replace: true });
+    // navigate("/", { replace: true });
   };
 
   return (
@@ -55,7 +56,7 @@ export const Navigation = () => {
                 title={
                   <Fragment>
                     <img
-                      src={user.picture}
+                      src={user?.picture}
                       alt="profile-pic"
                       style={{
                         width: 30,
