@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from "react";
+import { Fragment, useState, useContext, useEffect, useRef } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -7,6 +7,7 @@ import { AppContext } from "../context/appContext";
 
 export const MessageForm = () => {
   const user = useSelector((state) => state.user);
+  const messageEndRef = useRef(null);
   const [message, setMessage] = useState("");
   const { socket, currentRoom, messages, setMessages, privateMemberMsg } =
     useContext(AppContext);
@@ -37,6 +38,10 @@ export const MessageForm = () => {
     setMessage("");
   };
 
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   // socket.off("room-messages").on("room-messages", (roomMessages) => {
   //   console.log(roomMessages);
   //   setMessages(roomMessages);
@@ -54,9 +59,32 @@ export const MessageForm = () => {
   //   setMessages(roomMessages);
   // });
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  console.log(messages);
+
   return (
     <Fragment>
       <div className="messages-output">
+        {user && !privateMemberMsg?._id && (
+          <div className="alert alert-info">
+            You are in the {currentRoom} room
+          </div>
+        )}
+        {user && privateMemberMsg?._id && (
+          <div className="alert alert-info conversation-info">
+            <span>
+              Your conversation with {privateMemberMsg.name}
+              <img
+                src={privateMemberMsg.picture}
+                alt=""
+                className="conversation-profile-pic"
+              />
+            </span>
+          </div>
+        )}
         {!user && <div className="alert alert-danger">Please login</div>}
 
         {user &&
@@ -66,12 +94,40 @@ export const MessageForm = () => {
                 {date}
               </p>
               {messagesByDate?.map(({ content, time, from }, _i) => (
-                <div key={_i} className="message">
-                  <p>{content}</p>
+                <div
+                  key={_i}
+                  className={
+                    from.email === user?.email ? "message" : "incoming-message"
+                  }
+                >
+                  {/* <p>{content}</p> */}
+                  <div className="message-inner">
+                    <div className="d-flex align-items-center mb-3">
+                      <img
+                        src={from?.picture}
+                        alt=""
+                        style={{
+                          width: 35,
+                          height: 35,
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                          marginRight: 10,
+                        }}
+                      />
+                      <p className="message-sender">
+                        {from._id === user?._id ? "You" : from.name}
+                      </p>
+                    </div>
+
+                    <p className="message-content">{content}</p>
+                    <p className="message-timestamp-left">{time}</p>
+                  </div>
                 </div>
               ))}
             </div>
           ))}
+
+        <div ref={messageEndRef} />
       </div>
 
       <Form onSubmit={handleSubmit}>

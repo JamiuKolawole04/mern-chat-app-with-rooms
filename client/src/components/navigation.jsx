@@ -27,7 +27,7 @@ export const Navigation = () => {
 
     // redirect to hom page
     // window.location.replace("/");
-    // navigate("/", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
