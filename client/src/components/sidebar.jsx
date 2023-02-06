@@ -76,7 +76,7 @@ export const Sidebar = () => {
       socket.emit("join-room", "general");
       socket.emit("new-user");
     }
-  }, [user, socket, setCurrentRoom, getRooms, joinRoom]);
+  }, [user, socket, setCurrentRoom, getRooms]);
 
   const orderIds = (id1, id2) => {
     if (id1 > id2) {
